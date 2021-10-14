@@ -5,10 +5,8 @@
     </transition>
     <Claim v-if="step === 0"/>
     <SearchInput @handleChange="handleInput" :dark="step === 1"/>
-    <div class="results">
-      <div v-for="item in results" :key="data.collection.items[].nasa_id">
-        <p>{{ item.links[0].href }}</p>
-      </div>
+    <div class="results" v-if="results && !loading && step === 1">
+      <Item v-for="item in results" :item="item" :key="item.data[0].nasa_id"/>
     </div>
   </div>
 </template>
@@ -18,6 +16,7 @@ import axios from 'axios';
 import Claim from '@/components/Claim.vue';
 import SearchInput from '@/components/SearchInput.vue';
 import HeroImage from '@/components/HeroImage.vue';
+import Item from '@/components/Item.vue';
 
 const API = 'https://images-api.nasa.gov';
 
@@ -27,6 +26,7 @@ export default {
     HeroImage,
     Claim,
     SearchInput,
+    Item,
   },
   data() {
     return {
@@ -96,6 +96,16 @@ body {
 
   &.flexStart {
     justify-content: flex-start;
+  }
+}
+
+.results {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 </style>
